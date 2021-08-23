@@ -21,3 +21,22 @@ resource "aws_ebs_volume" "dbSize" {  #500gb volume
   type              = "io2"
   encrypted         = true
 }
+
+provisioner "remote-exec" {
+    inline = [
+    cd /
+    yum install centos-release-scl
+    yum install httpd24-httpd rh-php73 rh-php73-php rh-php73-php-mbstring rh-php73-php-mysqlnd rh-php73-php-gd rh-php73-php-xml mariadb-server mariadb 
+    systemctl start mariadb
+    mysql_secure_installation
+    mysql -u root -p
+    CREATE USER 'wiki'@'localhost' IDENTIFIED BY 'NewXYZ';
+    CREATE DATABASE firstdata;
+    GRANT ALL PRIVILEGES ON wikidatabase.* TO 'wiki'@'localhost';
+    FLUSH PRIVILEGES;
+    SHOW DATABASES;
+    SHOW GRANTS FOR 'wiki'@'localhost';
+    exit
+    ]
+   
+  }

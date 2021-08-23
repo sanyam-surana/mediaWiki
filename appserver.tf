@@ -15,11 +15,16 @@ resource "aws_instance" "app1" {
 
  provisioner "remote-exec" {
     inline = [
-      "aws s3 cp <bucketpath> <destination>",
-      "unzip mediawiki.zip",
-      ",/mediawiki.exe",
+      cd /
+      wget https://releases.wikimedia.org/mediawiki/1.36/mediawiki-1.36.1.tar.gz
+      gpg --verify mediawiki-1.36.1.tar.gz.sig mediawiki-1.36.1.tar.gz
+      tar -zxf /home/username/mediawiki-1.36.1.tar.gz
+      ln -s mediawiki-1.36.1/ mediawiki
+     firewall-cmd --permanent --zone=public --add-service=http
+     firewall-cmd --permanent --zone=public --add-service=https
+     systemctl restart firewalld
     ]
-    #assuming mediawiki zip file is in S3 otherwise you can use wget command to fetch latest version from website
+
   }
 
 }

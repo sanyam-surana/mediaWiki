@@ -19,3 +19,14 @@ resource "aws_ebs_volume" "webSize" {    #200gb volume
   availability_zone = "us-west-2a"
   size              = 200
 }
+
+ provisioner "remote-exec" {
+    inline = [
+      systemctl enable mariadb
+      systemctl enable httpd
+      systemctl enable mariadb
+      systemctl enable httpd24-httpd.service
+    ]
+
+
+  }
